@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { AuthContext } from "../api/Auth.jsx";
 import { useNavigate } from "react-router-dom";
 import Loader from "../components/Layout/Loader.jsx";
+import Cookies from "js-cookie";
 const Initialize_Field = {
   username: "",
   password: "",
@@ -22,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     if (formData.username && formData.password) {
       await authenticate(formData);
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (token) {
         navigate("/dashboard", { replace: true });
         setFormData(Initialize_Field);

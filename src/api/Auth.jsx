@@ -1,10 +1,10 @@
 import { createContext, useState } from "react";
 import axios from "axios";
-
+import Cookies from "js-cookie";
 export const AuthContext = createContext();
 
 const Auth = ({ children }) => {
-  const [loginToken, setLoginToken] = useState(localStorage.getItem("token"));
+  const [loginToken, setLoginToken] = useState(Cookies.get("token"));
   const [isTokenExpired, setIsTokenExpired] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState({ _id: "", username: "" });
   const [errorMessage, seterrorMessage] = useState(null);
@@ -19,7 +19,7 @@ const Auth = ({ children }) => {
 
   const getUser = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (token) {
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}/admin/auth`,
@@ -37,7 +37,7 @@ const Auth = ({ children }) => {
           setIsTokenExpired(true);
           seterrorMessage("Your session has been expired.");
           setTimeout(() => seterrorMessage(null), 5000);
-          localStorage.removeItem("token");
+          Cookies.remove("token");
         }
       }
     } catch (error) {
@@ -122,7 +122,8 @@ const Auth = ({ children }) => {
           setTimeout(() => seterrorMessage(null), 3000);
         } else {
           setLoader(false);
-          localStorage.setItem("token", response.data.token);
+          Cookies.set("token", response.data.token);
+          // localStorage.setItem("token", response.data.token);
           setLoginToken(response.data.token);
           await getUser();
           seterrorMessage(null);
@@ -260,9 +261,9 @@ const Auth = ({ children }) => {
 
   const logout = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       if (token) {
-        localStorage.removeItem("token");
+        Cookies.remove("token");
         setLoginToken(null);
       }
     } catch (error) {
