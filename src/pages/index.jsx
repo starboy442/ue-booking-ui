@@ -6,7 +6,9 @@ import Coupons from "./Coupons.jsx";
 import AddCoupon from "./AddCoupon.jsx";
 import ReportUsers from "./ReportUsers.jsx";
 import BannedUsers from "./BannedUsers.jsx";
+import Signup from "./SignUp.jsx";
 export {
+  Signup,
   Login,
   Dashboard,
   Users,

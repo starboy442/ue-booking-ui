@@ -5,10 +5,13 @@ import Loader from "../components/Layout/Loader.jsx";
 import Cookies from "js-cookie";
 const Initialize_Field = {
   username: "",
+  email:"",
+  role:"admin",
   password: "",
+
 };
-const Login = () => {
-  const { authenticate, errorMessage, loader, alert } = useContext(AuthContext);
+const Signup = () => {
+  const { register, errorMessage, loader, alert } = useContext(AuthContext);
   const [formData, setFormData] = useState(Initialize_Field);
   const navigate = useNavigate();
   const handleChange = (e) => {
@@ -21,8 +24,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.username && formData.password) {
-      await authenticate(formData);
+    if (formData.username && formData.email && formData.password) {
+      await register(formData);
       const token = Cookies.get("token");
       if (token) {
         navigate("/dashboard", { replace: true });
@@ -38,7 +41,7 @@ const Login = () => {
 
       <div className="login-box px-6 py-8">
         <h1 className="font-[600] text-slate-600 text-2xl w-full text-center">
-          Login your account.
+          Create Account.
         </h1>
         {errorMessage && (
           <div className="bg-red-100 rounded-lg w-full px-3 py-3 mt-3">
@@ -72,6 +75,15 @@ const Login = () => {
             onChange={handleChange}
           />
           <input
+            type="email"
+            name="email"
+            placeholder="email"
+            required
+            className="input placeholder:text-sm focus:bg-white"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <input
             type="password"
             name="password"
             placeholder="Password"
@@ -85,13 +97,13 @@ const Login = () => {
             className="inline-block px-12 py-2 mt-3 bg-slate-800 text-white text-lg rounded-lg hover:bg-slate-700 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-700  focus:bg-slate-700 "
             disabled={loader}
           >
-            {!loader ? "Login" : <Loader />}
+            {!loader ? "Signup" : <Loader />}
           </button>
-            <Link to="/signup" className="block mt-3 text-sm text-slate-600 hover:text-slate-700">Create Account</Link>
+          <Link to="/" className="block mt-3 text-sm text-slate-600 hover:text-slate-700">Already a member</Link>
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
+  Signup,
   Login,
   Dashboard,
   Users,
@@ -16,6 +17,16 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+      <Route
+          path="/signup"
+          element={
+            loginToken && !isTokenExpired ? (
+              <Navigate to="/dashboard" replace={true} />
+            ) : (
+              <Signup />
+            )
+          }
+        />
         <Route
           path="/"
           element={

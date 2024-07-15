@@ -136,6 +136,36 @@ const Auth = ({ children }) => {
     }
   };
 
+
+  const register = async (data) => {
+    console.log(data);
+    try {
+      setLoader(true);
+      const response  = await axios.post(
+        `${import.meta.env.VITE_API_URL}/admin/auth/register`,
+        {
+          ...data,
+        }
+      );
+      if(response.data.status === "success"){
+        setLoader(false);
+        Cookies.set("token", response.data.token);
+        setLoginToken(response.data.token);
+        await getUser();
+        seterrorMessage(null);
+      } else {
+        setLoader(false);
+        seterrorMessage(response.data.message);
+        setTimeout(() => seterrorMessage(null), 3000);
+      }
+    } catch (error) {
+      setLoader(false);
+      seterrorMessage(`Registration Error : ${error.message}`);
+      setTimeout(() => seterrorMessage(null), 3000);
+    }
+
+  }
+
   const change_password = async (data) => {
     if (data.password === data.confirm_password) {
       try {
@@ -208,6 +238,8 @@ const Auth = ({ children }) => {
     }
     hideAlerts();
   };
+
+
   const un_banned_user = async (banned_user_id) => {
     try {
       const response = await axios.patch(
@@ -272,6 +304,7 @@ const Auth = ({ children }) => {
   };
 
   const value = {
+    register,
     authenticate,
     logout,
     errorMessage,
