@@ -138,7 +138,6 @@ const Auth = ({ children }) => {
 
 
   const register = async (data) => {
-    console.log(data);
     try {
       setLoader(true);
       const response  = await axios.post(
